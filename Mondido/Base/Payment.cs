@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Plugin.DeviceInfo;
 using Xamarin.Forms;
 
 namespace Mondido.Base
 {
-	public class Pay
+	public class Payment
 	{
 		private WebView browser;
 		private Action<WebParams> onSuccessCallback;
@@ -13,12 +14,12 @@ namespace Mondido.Base
 		private Action<WebParams> onAuthorizeCallback;
 		private WebParams dataParams;
 
-		public Pay(WebView b, 
-		           WebParams data,
-		           Action<WebParams> onSuccess,
-				   Action<WebParams> onFail,
+		public Payment(
+					WebView b, 
+		           	WebParams data,
+		           	Action<WebParams> onSuccess,
+					Action<WebParams> onFail,
   					Action<WebParams> onAuthorize = null
-
 		)
 		{
 			this.browser = b;
@@ -35,13 +36,22 @@ namespace Mondido.Base
 			{
 				this.dataParams = prm;
 			}
+			/*
+			var id = CrossDeviceInfo.Current.GenerateAppId();
+			string metadataStr = @"{id: '"+CrossDeviceInfo.Current.Id+"', " +
+			                                              "model: '"+CrossDeviceInfo.Current.Model+"', " +
+														  "platform: '" + CrossDeviceInfo.Current.Platform + "'" +
+			                                              "version: '"+CrossDeviceInfo.Current.Version+"'" +
+														  "}";
 
+			this.dataParams.Add("metadata[device]",metadataStr);
+*/
 			var source = new HtmlWebViewSource();
 			var sb = new StringBuilder();
-			sb.Append("<html><body><form action=\"https://pay.mondido.com/v1/form\" method=\"post\">");
+
+			sb.Append("<html><body><form action=\"https://pay-dual.mondido.com/v1/form?lang=en\" method=\"post\">");
 
 			//add device data. lang, hardware, software, etc.
-
 			foreach (KeyValuePair<string, string> p in this.dataParams)
 			{
 				sb.Append("<input type=\"hidden\" name=\""+p.Key+"\" value=\""+p.Value+"\">");
@@ -53,6 +63,11 @@ namespace Mondido.Base
 			browser.Source = source;
 		}
 
+		/// <summary>
+		/// Forwarder for URLs in the WebView
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">E.</param>
 		public void OnChange(object sender, Xamarin.Forms.WebNavigatedEventArgs e)
 		{
 

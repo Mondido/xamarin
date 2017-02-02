@@ -1,6 +1,9 @@
 ﻿using System;
 namespace Mondido.Base
 {
+	/// <summary>
+	/// Payment statuses in the response
+	/// </summary>
 	public enum Param
 	{
 		UNKNOWN,
@@ -8,6 +11,5 @@ namespace Mondido.Base
 		AUTHORIZED,
 		DECLINED,
 		FAILED
-
 	}
 }

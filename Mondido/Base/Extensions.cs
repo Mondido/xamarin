@@ -5,7 +5,11 @@ namespace Mondido.Base
 {
 	public static class Extensions
 	{
-
+		/// <summary>
+		/// String to MD5
+		/// </summary>
+		/// <returns>The hash.</returns>
+		/// <param name="s">String</param>
 		public static string ToMD5(this string s)
 		{
 			IHashAlgorithmProvider algoProv = WinRTCrypto.HashAlgorithmProvider.OpenAlgorithm(HashAlgorithm.Md5);

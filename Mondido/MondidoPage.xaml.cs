@@ -9,7 +9,7 @@ namespace Mondido
 	public partial class MondidoPage : ContentPage
 	{
 
-		Base.Pay payment;
+		Base.Payment payment;
 		/// <summary>
 		/// Success callback.
 		/// </summary>
@@ -51,8 +51,8 @@ namespace Mondido
 			data.Add("amount", amount);
 			data.Add("currency", currency);
 			data.Add("merchant_id", merchantId);
-			data.Add("success_url", "https://mywebsite.com/payment_success?data=value&data2=value2");
-			data.Add("error_url", "https://mywebsite.com/payment_success?data=value&data2=value2");
+			data.Add("success_url", "https://api.mondido.com/success");// need to be a working URL for IOS
+			data.Add("error_url", "https://api.mondido.com/fail");// need to be a working URL for IOS
 			data.Add("test", "true");
 			data.Add("authorize", "false");
 			data.Add("store_card", "false");
@@ -72,7 +72,7 @@ namespace Mondido
 			data.Add("hash", hash.ToMD5());
 
 			//Init the payment object
-			payment = new Pay(
+			payment = new Mondido.Base.Payment(
 				browser,
 				data,
 				OnSuccess,
