@@ -3,20 +3,19 @@ using System.Collections.Generic;
 
 namespace Mondido.Base
 {
-	public class WebParams :List<KeyValuePair<string, string>>
+	public class WebParams : Dictionary<string,string> 
 	{
 		public Param Status
 		{
 			get 
 			{
-				var s = GetVal("status");
-				if (s == string.Empty)
+				if(!this.ContainsKey("status"))
 				{
 					return Param.UNKNOWN;
 				}
 				try
 				{
-					return (Mondido.Base.Param)Enum.Parse(typeof(Param), s.ToUpper());
+					return (Mondido.Base.Param)Enum.Parse(typeof(Param), this["status"].ToUpper());
 				}
 				catch
 				{
@@ -40,44 +39,30 @@ namespace Mondido.Base
 				var item = s.Split('=');
 				if (item.Length > 1)
 				{
-					pms.Add(item[0].Replace("?",""), item[1]);
+					string thisKey = item[0].Replace("?", "");
+					if (pms.ContainsKey(thisKey))
+					{
+						pms[thisKey] = item[1];
+					}
+					else
+					{
+						pms.Add(thisKey, item[1]);
+					}
 				}
+
 			}
 			return pms;
 		}
 
-		internal void Add(string key, string val)
-		{
-			var item = Get(key);
-			if (item != null) 
-			{
-				this.Remove(new KeyValuePair<string, string>(item.Value.Key, item.Value.Value));
-
-			}
-			this.Add(new KeyValuePair<string, string>(key, val));
-			         
-		}
 
 		internal string GetVal(string key)
 		{
-			var item = this.Get(key);
-			if (item.HasValue)
+			if (this.ContainsKey(key)) 
 			{
-				return item.Value.Value;
+				return this[key];
 			}
 			return string.Empty;
 		}
 
-		internal KeyValuePair<string, string>? Get(string key)
-		{
-			foreach (KeyValuePair<string, string> item in this)
-			{
-				if (item.Key == key)
-				{
-					return item;
-				}
-			}
-			return null;
-		}
 	}
 }
