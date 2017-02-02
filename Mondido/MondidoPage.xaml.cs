@@ -35,8 +35,9 @@ namespace Mondido
 		public MondidoPage()
 		{
 			InitializeComponent();
-
 			WebParams data = new WebParams();
+
+			//Your account settings, fetch it from https://admin.mondido.com/en/settings#api
 			var merchantId = "233";
 			var secret = "$2a$10$gU.z.9QNc8VSGYqcJSOhv."; ///Shh, should be stored in your backend!
 			var paymentRef = Guid.NewGuid().ToString();
@@ -45,7 +46,7 @@ namespace Mondido
 			var currency = "eur";
 
 
-			// Find out what to send in the documentation
+			//Find out what to send in the documentation
 			//https://doc.mondido.com/hosted#outgoing
 			data.Add("payment_ref", paymentRef);
 			data.Add("customer_ref", customerRef);

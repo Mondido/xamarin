@@ -54,4 +54,8 @@ Global
 		{49C86C48-68E4-41C3-A086-D50CB96B25A6}.Debug|iPhone.ActiveCfg = Debug|Any CPU
 		{49C86C48-68E4-41C3-A086-D50CB96B25A6}.Debug|iPhone.Build.0 = Debug|Any CPU
 	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		description = @Mondido Payments Xamarin SDK\nhttps://www.mondido.com/en\n\nhelp@mondido.com
+		version = 1.0
+	EndGlobalSection
 EndGlobal
