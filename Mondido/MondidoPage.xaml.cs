@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Mondido.Base;
 using Newtonsoft.Json.Linq;
+using Plugin.DeviceInfo;
 using Xamarin.Forms;
 
 namespace Mondido
@@ -57,13 +58,15 @@ namespace Mondido
 			data.Add("authorize", "false");
 			data.Add("store_card", "false");
 
-			string metadataStr = @"{ customer: {name: 'Tester', email: 'name@company.com'} }";
+			var device = @"{model: '"+CrossDeviceInfo.Current.Model+"', platform: '"+CrossDeviceInfo.Current.Platform+"', version: '"+CrossDeviceInfo.Current.Version+"', id: '"+CrossDeviceInfo.Current.Id+"'}";
+
+			string metadataStr = @"{ customer: {name: 'Tester', email: 'name@company.com'}, device: "+device+"}";
 			var metadata = JObject.Parse(metadataStr);
-			data.Add("metadata", metadata.ToString());
+			data.Add("metadata", System.Net.WebUtility.UrlEncode(metadata.ToString()));
 
 			string itemsStr = "[{artno: '"+Guid.NewGuid().ToString()+"', description: 'An item', amount: '10.00', vat: '25.00', qty: '1' }]";
 			var items = JArray.Parse(itemsStr);
-			data.Add("items", items.ToString());
+			data.Add("items", System.Net.WebUtility.UrlEncode(items.ToString()));
 
 
 			// The hash *should* be generated in your backend for security reasons.

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Newtonsoft.Json.Linq;
 using Plugin.DeviceInfo;
 using Xamarin.Forms;
 
@@ -36,16 +37,7 @@ namespace Mondido.Base
 			{
 				this.dataParams = prm;
 			}
-			/*
-			var id = CrossDeviceInfo.Current.GenerateAppId();
-			string metadataStr = @"{id: '"+CrossDeviceInfo.Current.Id+"', " +
-			                                              "model: '"+CrossDeviceInfo.Current.Model+"', " +
-														  "platform: '" + CrossDeviceInfo.Current.Platform + "'" +
-			                                              "version: '"+CrossDeviceInfo.Current.Version+"'" +
-														  "}";
 
-			this.dataParams.Add("metadata[device]",metadataStr);
-*/
 			var source = new HtmlWebViewSource();
 			var sb = new StringBuilder();
 
@@ -54,8 +46,10 @@ namespace Mondido.Base
 			//add device data. lang, hardware, software, etc.
 			foreach (KeyValuePair<string, string> p in this.dataParams)
 			{
-				sb.Append("<input type=\"hidden\" name=\""+p.Key+"\" value=\""+p.Value+"\">");
+				sb.Append("<input type=\"hidden\" name=\""+p.Key+"\" value=\""+p.Value+"\" \\>");
 			}
+
+			sb.Append("</form>");
 			sb.Append("<script type=\"text/javascript\">document.forms[0].submit();</script>");
 			sb.Append("</body></html>");
 
