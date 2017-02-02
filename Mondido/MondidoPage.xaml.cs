@@ -10,30 +10,42 @@ namespace Mondido
 	{
 
 		Base.Pay payment;
+		/// <summary>
+		/// Success callback.
+		/// </summary>
+		/// <param name="p">List of paramas comping from the URL</param>
 		void OnSuccess(WebParams p)
 		{
 			browser.IsVisible = false;
 			DisplayAlert("Success", "Payment is done!", "Thanks");	
+			//continue with your business here
 		}
 
+		/// <summary>
+		/// Fail callback
+		/// </summary>
+		/// <param name="p">List of paramas comping from the URL</param>
 		void OnFail(WebParams p)
 		{
 			DisplayAlert("Failed", "Payment is failed!", "Ok");
-			payment.ExecuteHostedPayment();
+			payment.ExecuteHostedPayment(); //try again
 		}
 
 		public MondidoPage()
 		{
 			InitializeComponent();
+
 			WebParams data = new WebParams();
-			// MD5(merchant_id + payment_ref + customer_ref + amount + currency + test + secret)
 			var merchantId = "233";
-			var secret = "$2a$10$gU.z.9QNc8VSGYqcJSOhv.";
+			var secret = "$2a$10$gU.z.9QNc8VSGYqcJSOhv."; ///Shh, should be stored in your backend!
 			var paymentRef = Guid.NewGuid().ToString();
 			var customerRef = "123";
 			var amount = "10.00";
 			var currency = "eur";
 
+
+			// Find out what to send in the documentation
+			//https://doc.mondido.com/hosted#outgoing
 			data.Add("payment_ref", paymentRef);
 			data.Add("customer_ref", customerRef);
 			data.Add("amount", amount);
@@ -53,8 +65,13 @@ namespace Mondido
 			var items = JArray.Parse(itemsStr);
 			data.Add("items", items.ToString());
 
-			var hash = (merchantId + paymentRef + customerRef + amount + currency + "test" + secret);
+
+			// The hash *should* be generated in your backend for security reasons.
+			// Recipe: MD5(merchant_id + payment_ref + customer_ref + amount + currency + test + secret)
+			var hash = (merchantId + paymentRef + customerRef + amount + currency + "test" + secret); 
 			data.Add("hash", hash.ToMD5());
+
+			//Init the payment object
 			payment = new Pay(
 				browser,
 				data,
@@ -62,6 +79,7 @@ namespace Mondido
 				OnFail
 			);
 
+			//execute the payment
 			payment.ExecuteHostedPayment();
 		}
 	}
